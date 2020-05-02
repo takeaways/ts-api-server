@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"lib": ["ES2020"],
+		"module": "CommonJs",
+		"moduleResolution": "node",
+		"outDir": "dist"
+	}
+}
+
+/*
+--traceResolution
+
+*/
