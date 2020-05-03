@@ -8,6 +8,13 @@ import * as dotenv from 'dotenv';
 import * as hpp from 'hpp';
 import * as helmet from 'helmet';
 
+import { sequelize } from './models';
+
+import userRouter from './routers/user';
+import postRouter from './routers/post';
+import postsRouter from './routers/posts';
+import hashtagRouter from './routers/hashtag';
+
 dotenv.config();
 const app = express();
 app.set('PORT', process.env.PORT || 8000);
@@ -20,7 +27,7 @@ if (ENV) {
 	app.use(
 		cors({
 			origin: /geoniljang\.com$/,
-			credentials: true
+			credentials: true,
 		})
 	);
 } else {
@@ -28,7 +35,7 @@ if (ENV) {
 	app.use(
 		cors({
 			origin: true,
-			credentials: true
+			credentials: true,
 		})
 	);
 }
@@ -45,16 +52,26 @@ app.use(
 		cookie: {
 			httpOnly: true,
 			secure: false,
-			domain: ENV ? '.geoniljang.com' : undefined
+			domain: ENV ? '.geoniljang.com' : undefined,
 		},
-		name: 'ngi'
+		name: 'ngi',
 	})
 );
 
-app.get('/', (req, res) => {
-	res.send('Hell owlrd');
-});
+app.use('/user', userRouter);
+app.use('/post', postRouter);
+app.use('/posts', postsRouter);
+app.use('/hashtag', hashtagRouter);
 
-app.listen(app.get('PORT'), () => {
-	console.log('Server is Running on Port ' + app.get('PORT'));
-});
+sequelize
+	.sync({ force: false })
+	.then(() => {
+		console.log('Database Connected....');
+		app.listen(app.get('PORT'), () => {
+			console.log('Server is Running on Port ' + app.get('PORT'));
+		});
+	})
+	.catch((e: Error) => {
+		console.log('------------------- s');
+		console.log(e);
+	});

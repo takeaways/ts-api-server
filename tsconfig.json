@@ -4,8 +4,13 @@
 		"lib": ["ES2020"],
 		"module": "CommonJs",
 		"moduleResolution": "node",
-		"outDir": "dist"
+		"outDir": "dist",
+		"typeRoots": ["./types"]
 	}
+	// "files": [
+	// 	"./index.ts",
+	// 	"./types/index.ts"
+	// ], /*컴파일할 파일을 선택 하는 옵션이지 타입으로 사용되지는 않습니다.*/
 }
 
 /*
