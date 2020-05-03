@@ -8,6 +8,7 @@ import * as dotenv from 'dotenv';
 import * as hpp from 'hpp';
 import * as helmet from 'helmet';
 
+import passportConfig from './passport';
 import { sequelize } from './models';
 
 import userRouter from './routers/user';
@@ -17,6 +18,7 @@ import hashtagRouter from './routers/hashtag';
 
 dotenv.config();
 const app = express();
+passportConfig();
 app.set('PORT', process.env.PORT || 8000);
 const ENV: boolean = process.env.NODE_ENV === 'production' ? true : false;
 
@@ -57,6 +59,9 @@ app.use(
 		name: 'ngi',
 	})
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/user', userRouter);
 app.use('/post', postRouter);

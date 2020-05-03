@@ -6,6 +6,10 @@ declare module 'express-serve-static-core' {
 	}
 }
 
+export interface Query {
+	lastId: string;
+}
+
 // declare global {
 // 	namespace Express {
 // 		interface Request {

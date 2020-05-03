@@ -27,6 +27,7 @@ router.post('/', isAuth.isNotLoggedInt, async (req, res, next) => {
 				userId: req.body.userId,
 			},
 		});
+		console.log('----> user', user);
 		if (user) {
 			res.status(403).json({
 				message: '이미 사용중인 아이디 입니다.',
@@ -34,6 +35,9 @@ router.post('/', isAuth.isNotLoggedInt, async (req, res, next) => {
 		}
 
 		const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+		console.log('------>');
+
 		const newUser = await User.create({
 			nickname: req.body.nickname,
 			userId: req.body.userId,
@@ -48,23 +52,20 @@ router.post('/', isAuth.isNotLoggedInt, async (req, res, next) => {
 router.post('/login', isAuth.isNotLoggedInt, (req, res, next) => {
 	passport.authenticate(
 		'local',
-		(err, user: User, info: { message: string }) => {
+		(err: Error, user: User, info: { message: string }) => {
 			if (err) {
 				console.error(err);
 				return next(err);
 			}
 			if (info) {
-				console.log(info);
-				return res.status(401).json({
-					message: info.message,
-				});
+				return res.status(401).send(info.message);
 			}
 			return req.login(user, async (loginErr: Error) => {
 				try {
 					if (loginErr) {
-						next(loginErr);
+						return next(loginErr);
 					}
-					const requestUser = await User.findOne({
+					const fullUser = await User.findOne({
 						where: { id: user.id },
 						include: [
 							{
@@ -87,8 +88,10 @@ router.post('/login', isAuth.isNotLoggedInt, (req, res, next) => {
 							exclude: ['password'],
 						},
 					});
-				} catch (error) {
-					next(error);
+					return res.json(fullUser);
+				} catch (e) {
+					console.error(e);
+					return next(e);
 				}
 			});
 		}

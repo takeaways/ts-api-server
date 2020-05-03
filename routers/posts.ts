@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
 	try {
 		let where = {};
-		if (parseInt(req.query.listId.toString(), 10)) {
+		if (parseInt(req.query.listId as string, 10)) {
 			where = {
 				id: {
 					[Sequelize.Op.lt]: parseInt(req.query.lastId.toString(), 10),
@@ -20,12 +20,6 @@ router.get('/', async (req, res, next) => {
 		const posts = await Post.findAll({
 			where,
 			include: [
-				{
-					model: Hashtag,
-					where: {
-						name: decodeURIComponent(req.params.tag),
-					},
-				},
 				{
 					model: User,
 					attributes: ['id', 'nickname'],
@@ -54,6 +48,7 @@ router.get('/', async (req, res, next) => {
 			],
 			order: [['createdAt', 'DESC']],
 		});
+		console.log(posts);
 		return res.json(posts);
 	} catch (error) {
 		next(error);

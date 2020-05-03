@@ -5,6 +5,7 @@ import Post from '../models/post';
 import Hashtag from '../models/hashtag';
 import Image from '../models/image';
 import User from '../models/user';
+import Comment from '../models/comment';
 const router = express.Router();
 
 const upload = multer({
@@ -78,4 +79,177 @@ router.post('/images', upload.array('image'), async (req, res, next) => {
 	}
 });
 
+router.get('/:id', async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: { id: req.params.id },
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'nickname'],
+				},
+				{
+					model: Image,
+				},
+				{
+					model: User,
+					as: 'Likers',
+					attributes: ['id'],
+				},
+			],
+		});
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+		return res.json(post);
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.delete('/:id', isAuth.isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: {
+				id: req.params.id,
+			},
+		});
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+
+		await Post.destroy({
+			where: {
+				id: req.params.id,
+			},
+		});
+		return res.json({
+			message: 'Delete Post Success',
+		});
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.get('/:id/comments', async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: {
+				id: req.params.id,
+			},
+		});
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+		const comments = await Comment.findAll({
+			where: {
+				PostId: req.params.id,
+			},
+			order: [['createdAt', 'ASC']],
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'nickname'],
+				},
+			],
+		});
+		return res.json(comments);
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.post('/:id/comment', isAuth.isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: {
+				PostId: req.params.id,
+			},
+		});
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+		const newComment = await Comment.create({
+			PostId: post.id,
+			UserId: req.user!.id,
+			content: req.body.content,
+		});
+		const comment = await Comment.findOne({
+			where: {
+				id: newComment.id,
+			},
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'nickname'],
+				},
+			],
+		});
+		return res.json(comment);
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.post('/:id/like', isAuth.isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: {
+				id: req.params.id,
+			},
+		});
+		console.log(post);
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+
+		await post.addLiker(req.user!.id);
+		return res.json({ userId: req.user!.id });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.delete('/:id/like', isAuth.isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: {
+				PostId: req.params.id,
+			},
+		});
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+
+		await post.removeLiker(req.user!.id);
+		return res.json({ userId: req.user!.id });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.post('/:id/retweet', isAuth.isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await Post.findOne({
+			where: {
+				PostId: req.params.id,
+			},
+		});
+		if (!post)
+			return res.status(404).json({
+				message: 'Not Found Post',
+			});
+
+		await post.add(req.user!.id);
+		return res.json({ userId: req.user!.id });
+	} catch (error) {
+		next(error);
+	}
+});
 export default router;

@@ -1,8 +1,9 @@
 {
 	"compilerOptions": {
 		"strict": true,
+		"target": "ES6",
 		"lib": ["ES2020"],
-		"module": "CommonJs",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"outDir": "dist",
 		"typeRoots": ["./types"]
