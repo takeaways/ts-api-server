@@ -28,7 +28,7 @@ router.post(
 					Hashtag.findOrCreate({ where: { name: h.slice(1).toLowerCase() } })
 				);
 				const result = await Promise.all(tags);
-				await newPost.addHashtags(result.map((r) => r[0]));
+				// await newPost.addHashtags(result.map((r: any) => r[0]));
 			}
 			if (req.body.image) {
 				if (Array.isArray(req.body.image)) {
@@ -38,7 +38,7 @@ router.post(
 						})
 					);
 					const result = await Promise.all(imgs);
-					await newPost.addImages(result);
+					// await newPost.addImages(result);
 				} else {
 					const img = await Image.create({ src: req.body.image });
 					await newPost.addImage(img);
@@ -246,7 +246,7 @@ router.post('/:id/retweet', isAuth.isLoggedIn, async (req, res, next) => {
 				message: 'Not Found Post',
 			});
 
-		await post.add(req.user!.id);
+		// await post.addU(req.user!.id);
 		return res.json({ userId: req.user!.id });
 	} catch (error) {
 		next(error);

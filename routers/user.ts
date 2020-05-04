@@ -39,7 +39,7 @@ router.post('/', isAuth.isNotLoggedInt, async (req, res, next) => {
 			password: hashedPassword,
 		});
 		const userJson = newUser.toJSON();
-		delete userJson.password;
+		delete (userJson as User).password;
 		return res.status(200).json(userJson);
 	} catch (error) {
 		next(error);
