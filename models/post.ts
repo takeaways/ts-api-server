@@ -9,7 +9,7 @@ import { sequelize } from './sequelize';
 import { dbType } from '.';
 import Hashtag from './hashtag';
 import Image from './image';
-import User from './User';
+import User from './user';
 class Post extends Model {
 	public readonly id!: number;
 	public content!: string;
