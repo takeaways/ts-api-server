@@ -40,7 +40,8 @@
 	"scripts": {
 		"test": "tsc --traceResolution",
 		"start": "nodemon",
-		"build": "tsc"
+		"build": "tsc",
+		"db": "sequelize db:create"
 	},
 	"repository": {
 		"type": "git",
