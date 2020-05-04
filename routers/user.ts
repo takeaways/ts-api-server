@@ -21,29 +21,26 @@ router.get('/', isAuth.isLoggedIn, async (req, res) => {
 });
 router.post('/', isAuth.isNotLoggedInt, async (req, res, next) => {
 	try {
-		console.log(req.body);
 		const user = await User.findOne({
 			where: {
 				userId: req.body.userId,
 			},
 		});
-		console.log('----> user', user);
 		if (user) {
-			res.status(403).json({
+			return res.json({
 				message: '이미 사용중인 아이디 입니다.',
 			});
 		}
 
 		const hashedPassword = await bcrypt.hash(req.body.password, 12);
-
-		console.log('------>');
-
 		const newUser = await User.create({
 			nickname: req.body.nickname,
 			userId: req.body.userId,
 			password: hashedPassword,
 		});
-		return res.status(200).json(newUser);
+		const userJson = newUser.toJSON();
+		delete userJson.password;
+		return res.status(200).json(userJson);
 	} catch (error) {
 		next(error);
 	}
