@@ -17,6 +17,7 @@ interface IUser extends User {
 router.get('/', isAuth.isLoggedIn, async (req, res) => {
 	const user = req.user!.toJSON() as User;
 	delete user.password;
+	console.log(user);
 	return res.json(user);
 });
 router.post('/', isAuth.isNotLoggedInt, async (req, res, next) => {
@@ -55,7 +56,7 @@ router.post('/login', isAuth.isNotLoggedInt, (req, res, next) => {
 				return next(err);
 			}
 			if (info) {
-				return res.status(401).send(info.message);
+				return res.json(info);
 			}
 			return req.login(user, async (loginErr: Error) => {
 				try {
@@ -95,10 +96,10 @@ router.post('/login', isAuth.isNotLoggedInt, (req, res, next) => {
 	)(req, res, next);
 });
 
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
 	req.logout();
 	req.session?.destroy(() => {
-		res.status(200).json({
+		res.json({
 			message: '로그아웃 했습니다.',
 		});
 	});

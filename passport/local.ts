@@ -14,7 +14,6 @@ export default () => {
 			async (userId, password, done) => {
 				try {
 					const user = await User.findOne({ where: { userId } });
-					console.log(user);
 					if (!user) {
 						return done(null, false, {
 							message: '존재하지 않는 사용자입니다!',
