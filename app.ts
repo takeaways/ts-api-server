@@ -53,7 +53,7 @@ app.use(
 		secret: process.env.COOKIE_SECRET!,
 		cookie: {
 			httpOnly: true,
-			secure: true,
+			secure: 'auto',
 			domain: ENV ? '.geoniljang.com' : undefined,
 		},
 		name: 'ngi',
