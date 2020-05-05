@@ -23,19 +23,16 @@ app.set('PORT', process.env.PORT || 8000);
 const ENV: boolean = process.env.NODE_ENV === 'production' ? true : false;
 
 if (ENV) {
-	console.log('-------> 22222propduction ok');
 	app.use(hpp());
 	app.use(helmet());
-	// app.use(morgan('combined'));
-	app.use(morgan('dev'));
+	app.use(morgan('combined'));
 	app.use(
 		cors({
-			origin: true,
+			origin: /geoniljang\.com$/,
 			credentials: true,
 		})
 	);
 } else {
-	console.log('-------> 111111propduction ok');
 	app.use(morgan('dev'));
 	app.use(
 		cors({
@@ -57,7 +54,7 @@ app.use(
 		cookie: {
 			httpOnly: true,
 			secure: false,
-			domain: ENV ? 'geoniljang.com' : undefined,
+			// domain: ENV ? '.geoniljang.com' : undefined,
 		},
 		name: 'ngi',
 	})
