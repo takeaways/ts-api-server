@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
 const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
+	console.log('------>', req.cookies);
+
 	if (req.isAuthenticated()) {
 		next();
 	} else {
