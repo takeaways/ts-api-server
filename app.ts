@@ -23,6 +23,7 @@ app.set('PORT', process.env.PORT || 8000);
 const ENV: boolean = process.env.NODE_ENV === 'production' ? true : false;
 
 if (ENV) {
+	console.log('-------> propduction ok');
 	app.use(hpp());
 	app.use(helmet());
 	app.use(morgan('combined'));
