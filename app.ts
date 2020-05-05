@@ -25,13 +25,12 @@ const ENV: boolean = process.env.NODE_ENV === 'production' ? true : false;
 if (ENV) {
 	console.log('-------> 22222propduction ok');
 	app.use(hpp());
-	22;
 	app.use(helmet());
 	// app.use(morgan('combined'));
 	app.use(morgan('dev'));
 	app.use(
 		cors({
-			origin: /geoniljang\.com$/,
+			origin: 'movie.geoniljang.com',
 			credentials: true,
 		})
 	);
