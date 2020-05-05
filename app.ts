@@ -30,7 +30,7 @@ if (ENV) {
 	app.use(morgan('dev'));
 	app.use(
 		cors({
-			origin: 'geoniljang.com',
+			origin: true,
 			credentials: true,
 		})
 	);
