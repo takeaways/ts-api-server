@@ -27,7 +27,8 @@ if (ENV) {
 	app.use(hpp());
 	22;
 	app.use(helmet());
-	app.use(morgan('combined'));
+	// app.use(morgan('combined'));
+	app.use(morgan('dev'));
 	app.use(
 		cors({
 			origin: /geoniljang\.com$/,
