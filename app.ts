@@ -57,7 +57,7 @@ app.use(
 		cookie: {
 			httpOnly: true,
 			secure: false,
-			domain: ENV ? 'movie.geoniljang.com' : undefined,
+			domain: ENV ? 'geoniljang.com' : undefined,
 		},
 		name: 'ngi',
 	})
