@@ -4,6 +4,7 @@ import local from './local';
 
 export default () => {
 	passport.serializeUser<User, number>((user, done) => {
+		console.log('2', user);
 		done(null, user.id);
 	});
 
