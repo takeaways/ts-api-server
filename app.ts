@@ -52,9 +52,9 @@ app.use(
 		saveUninitialized: false,
 		secret: process.env.COOKIE_SECRET!,
 		cookie: {
-			maxAge: 1000 * 60 * 60,
+			maxAge: 3600000,
 			httpOnly: true,
-			secure: 'auto',
+			secure: false,
 			// domain: ENV ? '.geoniljang.com' : undefined,
 		},
 		name: 'ngi',
