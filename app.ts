@@ -15,6 +15,7 @@ import userRouter from './routers/user';
 import postRouter from './routers/post';
 import postsRouter from './routers/posts';
 import hashtagRouter from './routers/hashtag';
+import todoRouter from './routers/todo';
 
 dotenv.config();
 const app = express();
@@ -68,6 +69,7 @@ app.use('/user', userRouter);
 app.use('/post', postRouter);
 app.use('/posts', postsRouter);
 app.use('/hashtag', hashtagRouter);
+app.use('/todo', todoRouter);
 
 sequelize
 	.sync({ force: false })
